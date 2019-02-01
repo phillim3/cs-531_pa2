@@ -1,87 +1,99 @@
 #include <vector>
+#include <cmath>
+#include <unordered_set>
 
 using namespace std;
 
-struct solution //path
-{
+class Heuristic {
+public:
+    virtual int operator()(Board b) = 0;
+};
+
+class ManhattanDistance {
+public:
+    virtual int operator()(Board b) {
+        int MD = 0;
+        for (int i = 0; i < 15; ++i) {
+            int x = i / 4;
+            int y = i % 4;
+            int v = b.board[x][y] - 1;
+            MD += abs(x - (v / 4)) + abs(y - (v % 4));
+        }
+        return MD;
+    }
+};
+
+class {
+public:
+    virtual int operator()(Board b) {
+
+    }
+};
+
+class Solution {
+public:
     char movement = 'n';
-    vector<struct solution *> successors;
-    struct solution *parent;
+    vector<Solution *> successors;
+    Solution *parent;
     float f_value;
 } *start;
 
-struct board
-{
+class Board {
+public:
     int board[4][4];
     int i_cord;
     int j_cord;
 } problem;
 
-bool goal_test()
-{
-    int k = 1;
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            if (j != 3 && i != 3)
-            {
-                if (problem.board[i][j] != k)
-                {
-                    return false;
-                }
-                k++;
-            }
-        }
-    }
+bool goal_test(Board b, Heuristic &h) {
+    return h(b) == 0;
 }
 
-bool add_successors(struct solution *node)
+bool add_successor(Solution *node)
 {
     if (problem.i_cord == 0 || problem.i_cord == 1 || problem.i_cord == 2) //down
     {
-        node->successors.push_back(new struct solution);
+        node->successors.push_back(new Solution);
         node->successors.back()->parent = node;
         node->successors.back()->movement = 'd';
     }
     if (problem.i_cord == 1 || problem.i_cord == 2 || problem.i_cord == 3) //up
     {
-        node->successors.push_back(new struct solution);
+        node->successors.push_back(new Solution);
         node->successors.back()->parent = node;
         node->successors.back()->movement = 'u';
     }
     if (problem.j_cord == 0 || problem.j_cord == 1 || problem.i_cord == 2) //right
     {
-        node->successors.push_back(new struct solution);
+        node->successors.push_back(new Solution);
         node->successors.back()->parent = node;
         node->successors.back()->movement = 'r';
     }
     if (problem.j_cord == 1 || problem.j_cord == 2 || problem.i_cord == 3) //left
     {
-        node->successors.push_back(new struct solution);
+        node->successors.push_back(new Solution);
         node->successors.back()->parent = node;
         node->successors.back()->movement = 'l';
     }
 }
 
-void update_f_values(struct solution *node)
-{
+void update_f_values(Solution *node) {
        
 }
 
-void best_f(struct solution node)
+void best_f(Solution node)
 {
 }
 
-bool best_f_gt_f_limit(struct solution node, double f_limit)
+bool best_f_gt_f_limit(Solution node, double f_limit)
 {
 }
 
-void mark_alternative(struct solution node)
+void mark_alternative(Solution node)
 {
 }
 
-struct solution *rbfs(struct solution *node)
+struct solution *rbfs(Solution *node)
 {
     if (goal_test())
     {
