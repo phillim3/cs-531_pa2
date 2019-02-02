@@ -77,8 +77,17 @@ bool add_successor(Solution *node)
     }
 }
 
-void update_f_values(Solution *node) {
-       
+void update_f_values_manhattan(struct solution *node)
+{
+    int sum=0;
+    int k=0;
+    for(int i=0; i<4; i++)
+    {
+        for(int j=0; j<4; j++)
+        {
+            
+        }
+    }
 }
 
 void best_f(Solution node)
