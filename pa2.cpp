@@ -135,10 +135,29 @@ public:
     }
 };
 
+
 class InversionDistance : public Heuristic {
 public:
     virtual int operator()(Board &b) {
-        return 0;
+        int h_inv = 0;
+        int v_inv = 0;
+        for (int i = 0; i < 16; ++i) {
+            for (int j = i + 1; j < 16; ++j) {
+                int x = b.board[i / 4][i % 4];
+                int y = b.board[j / 4][j % 4];
+                if (x * y > 0) {                // ignore inversions with empty square
+                    if (x > y) ++h_inv;
+                
+                    // map to column major ordering
+                    int vi = 4 * (i % 4) + i / 4;
+                    int vj = 4 * (j % 4) + j / 4;
+                    int vx = 4 * ((x - 1) % 4) + (x - 1) / 4;
+                    int vy = 4 * ((y - 1) % 4) + (y - 1) / 4;
+                    if ((vx > vy) != (vi > vj)) ++v_inv;
+                }
+            }
+        }
+        return ceil(h_inv / 3.0) + ceil(v_inv / 3.0);
     }
 
     virtual string get_name() {
@@ -335,11 +354,11 @@ struct solution *recursive_best_first_search()
 
 */
 
-int main()
-{
+int main() {
     ManhattanDistance md;
     LinearConflictMD  lc;
     InversionDistance id;
+
     vector<Heuristic*> heuristics;
     heuristics.push_back(&md);
     heuristics.push_back(&lc);
