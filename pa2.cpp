@@ -24,10 +24,25 @@ public:
     int i_cord;
     int j_cord;
     
+    enum Action { UP, DOWN, LEFT, RIGHT };
+
     Board() : i_cord(3), j_cord(3) {
         for (int i = 0; i < 15; ++i)
             board[i / 4][i % 4] = i + 1;
         board[3][3] = 0;
+    }
+
+    Board(Board &b, Action a) : i_cord(b.i_cord), j_cord(b.j_cord) {
+        for (int i = 0; i < 4; ++i)
+            for (int j = 0; j < 4; ++j)
+                board[i][j] = b.board[i][j];
+
+        switch(a) {
+            case UP:    up();    break;
+            case DOWN:  down();  break;
+            case LEFT:  left();  break;
+            case RIGHT: right(); break;
+        }
     }
 
     bool operator==(const Board &b) const {
@@ -145,7 +160,7 @@ public:
             for (int j = i + 1; j < 16; ++j) {
                 int x = b.board[i / 4][i % 4];
                 int y = b.board[j / 4][j % 4];
-                if (x * y > 0) {                // ignore inversions with empty square
+                if (x * y > 0) {    // ignore inversions with empty square
                     if (x > y) ++h_inv;
                 
                     // map to column major ordering
@@ -185,10 +200,10 @@ public:
 
     vector<Board> successors(Board &b) {
         vector<Board> succ;
-        if (b.i_cord > 0) succ.emplace_back(Board(b).up());
-        if (b.i_cord < 3) succ.emplace_back(Board(b).down());
-        if (b.j_cord > 0) succ.emplace_back(Board(b).left());
-        if (b.j_cord < 3) succ.emplace_back(Board(b).right());
+        if (b.i_cord > 0) succ.emplace_back(b, Board::UP);
+        if (b.i_cord < 3) succ.emplace_back(b, Board::DOWN);
+        if (b.j_cord > 0) succ.emplace_back(b, Board::LEFT);
+        if (b.j_cord < 3) succ.emplace_back(b, Board::RIGHT);
         return succ;
     }
 
