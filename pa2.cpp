@@ -20,7 +20,9 @@ using namespace std;
  **************************************/
 class Board {
 public:
-    int board[4][4];
+    static const int ROWS = 4;
+    static const int COLS = 4;
+    int board[ROWS][COLS];
     int i_cord;
     int j_cord;
     
@@ -139,10 +141,63 @@ public:
     }
 };
 
+//
+// Linear conflict correction:
+// Look at every line of the puzzle. If you find two tiles there which are supposed to end up in this line,
+// but which are currently in the wrong order, then you know that the Manhattan distance is too optimistic
+// and you actually need at least 2 more moves to get the two tiles past each other.  One can prove that the
+// heuristic function remains admissible (in fact monotone) even if you add 2 for every pair with this problem
+// in any row. The same applies to every pair with the analogous problem in any column.
+//
 class LinearConflictMD : public ManhattanDistance {
+	Board solved = Board();
+
+	bool isValidForRow(int row, int x)
+	{
+		if (x >= solved.board[row][0] && x <= solved.board[row][Board::COLS-1])
+			return true;
+		return false;
+	}
+
+	int getRowCount(Board &b)
+	{
+		int count = 0;
+		for (int row = 0; row < Board::ROWS; row++)
+		{
+			for (int column = 0; column < Board::COLS-2; column++)
+			{				
+				int left = b.board[row][column];
+				int right = b.board[row][column+1];
+				int correct_right = solved.board[row][column+1];
+				if (isValidForRow(row, left) && isValidForRow(row, right))
+				{
+					if (right != correct_right)
+						count++;
+				}
+			}
+		}
+		return count;
+	}
+	
+	int getMD(Board &b)
+	{
+		int MD = 0;
+		for (int i = 0; i < 16; ++i) {
+			int x = i / 4;
+			int y = i % 4;
+			int v = b.board[x][y];
+			if (v > 0) {
+				int x_dest = (v - 1) / 4;
+				int y_dest = (v - 1) % 4;
+				MD += abs(x - x_dest) + abs(y - y_dest);
+			}
+		}
+		return MD;
+	}
+
 public:
     virtual int operator()(Board &b) {
-        return 0;
+		return getMD(b) + getRowCount(b);
     }
 
     virtual string get_name() {
@@ -370,17 +425,15 @@ struct solution *recursive_best_first_search()
 */
 
 int main() {
+
     ManhattanDistance md;
     LinearConflictMD  lc;
     InversionDistance id;
+    vector<Heuristic*> heuristics = {&md, &lc, &id};	
 
-    vector<Heuristic*> heuristics;
-    heuristics.push_back(&md);
-    heuristics.push_back(&lc);
-    heuristics.push_back(&id);
     for (int m = 10; m <= 50; m += 10) {
         for (int n = 0; n < 10; ++n) {
-            for (Heuristic *h : heuristics) {
+            for (Heuristic* h : heuristics) {
                     Problem p(*h);
                     Board start = p.scramble(m);
                     int nodes_expanded = 0;
