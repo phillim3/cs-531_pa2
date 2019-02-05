@@ -7,6 +7,7 @@
 #include <utility>
 #include <unordered_set>
 #include <climits>
+#include "MurmurHash3.h"
 
 using namespace std;
 
@@ -20,6 +21,7 @@ using namespace std;
  **************************************/
 class Board {
 public:
+	static const uint32_t HASHSEED = 0x9747b28c;
     static const int ROWS = 4;
     static const int COLS = 4;
     int board[ROWS][COLS];
@@ -94,15 +96,14 @@ public:
 // Implement std::hash<Board> so we can use std::unordered_set<Board>
 namespace std
 {
-    template<>
-        struct hash<Board> {
-            size_t operator()(const Board &b) const {
-                string t;
-                for (int i = 0; i < 16; ++i)
-                    t += to_string(b.board[i / 4][i % 4]) + ",";
-                return hash<string>()(t);
-            }
-        };
+	template<>
+	struct hash<Board> {
+		size_t operator()(const Board &b) const {
+			uint32_t hash;
+			MurmurHash3_x86_32(&b.board, sizeof(b.board), Board::HASHSEED, &hash);
+			return hash;						
+		}
+	};
 }
 
 
@@ -197,7 +198,7 @@ class LinearConflictMD : public ManhattanDistance {
 
 public:
     virtual int operator()(Board &b) {
-		return getMD(b) + getRowCount(b);
+		return getMD(b) + getRowCount(b)*2;
     }
 
     virtual string get_name() {
