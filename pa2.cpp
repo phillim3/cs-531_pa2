@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <string>
 #include <cmath>
@@ -425,12 +426,27 @@ struct solution *recursive_best_first_search()
 
 */
 
+void csv_write_headers(std::ofstream& f)
+{
+	f << "Scramble, Algorithm, Heuristic, Moves, NodesExpanded, CompTime" << endl;
+}
+
+void csv_write_row(std::ofstream& f, int scramble, string algo, string heuristic, int moves, int nodes_exp, int microseconds)
+{
+	f << scramble << "," << algo << "," << heuristic << "," << moves << "," << nodes_exp << "," << microseconds << endl;
+}
+
+
 int main() {
 
     ManhattanDistance md;
     LinearConflictMD  lc;
     InversionDistance id;
     vector<Heuristic*> heuristics = {&md, &lc, &id};	
+	
+	std::ofstream csv_file;
+	csv_file.open("pa2.csv");
+	csv_write_headers(csv_file);
 
     for (int m = 10; m <= 50; m += 10) {
         for (int n = 0; n < 10; ++n) {
@@ -444,6 +460,7 @@ int main() {
                     t1 = chrono::high_resolution_clock::now();
                     chrono::microseconds duration = chrono::duration_cast<chrono::microseconds>(t1 - t0);
                     p.print(solution);
+					csv_write_row(csv_file, m, "IDA*", h->get_name(), solution.size() - 1, nodes_expanded, duration.count());
                     cout << "Scramble number:\t" << m << endl;
                     cout << "Algorithm:\t\t\t\t" << "IDA*" << endl;
                     cout << "Heuristic:\t\t\t\t" << h->get_name() << endl;
@@ -454,4 +471,6 @@ int main() {
             }
         }
     }
+
+	csv_file.close();
 }
