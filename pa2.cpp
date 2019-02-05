@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <algorithm>
 #include <string>
 #include <cmath>
 #include <random>
@@ -28,6 +29,7 @@ public:
     int board[ROWS][COLS];
     int i_cord;
     int j_cord;
+    int F;
     
     enum Action { UP, DOWN, LEFT, RIGHT };
 
@@ -303,10 +305,8 @@ int DL_A_star(vector<Board> &path, unordered_set<Board> &pathSet, Problem &p, in
 
 vector<Board> ID_A_star(Board &start, Problem &p, int &nodes_expanded) {
     int f_limit = p.h(start);
-    vector<Board> path;
-    unordered_set<Board> pathSet;
-    path.push_back(start);
-    pathSet.insert(start);
+    vector<Board> path{start};
+    unordered_set<Board> pathSet{start};
     while(1) {
         int f_min = DL_A_star(path, pathSet, p, 0, f_limit, nodes_expanded);
         if (f_min <= f_limit) return path;              // if goal is found, return path
@@ -315,107 +315,45 @@ vector<Board> ID_A_star(Board &start, Problem &p, int &nodes_expanded) {
     }
 }
 
+/**********************
+ *   RBFS Algorithm   *
+ **********************/
+bool ascF(Board &b1, Board &b2) { return b1.F < b2.F; }
 
-/*
-
-class Solution {
-public:
-    char movement = 'n';
-    vector<Solution *> path;
-    Solution *parent;
-    float f_value;
-} *start;
-
-
-bool add_successor(Solution *node)
-{
-    if (problem.i_cord == 0 || problem.i_cord == 1 || problem.i_cord == 2) //down
-    {
-        node->successors.push_back(new Solution);
-        node->successors.back()->parent = node;
-        node->successors.back()->movement = 'd';
-    }
-    if (problem.i_cord == 1 || problem.i_cord == 2 || problem.i_cord == 3) //up
-    {
-        node->successors.push_back(new Solution);
-        node->successors.back()->parent = node;
-        node->successors.back()->movement = 'u';
-    }
-    if (problem.j_cord == 0 || problem.j_cord == 1 || problem.i_cord == 2) //right
-    {
-        node->successors.push_back(new Solution);
-        node->successors.back()->parent = node;
-        node->successors.back()->movement = 'r';
-    }
-    if (problem.j_cord == 1 || problem.j_cord == 2 || problem.i_cord == 3) //left
-    {
-        node->successors.push_back(new Solution);
-        node->successors.back()->parent = node;
-        node->successors.back()->movement = 'l';
+int RBFS(vector<Board> &path, Problem &p, int g, int f_limit, int &nodes_expanded) {
+    Board &b = path.back();
+    ++nodes_expanded;
+    if (p.goal_test(b)) return b.F;
+    vector<Board> successors = p.successors(b);
+    if (successors.empty()) return INT_MAX;
+    for (Board &s : successors)
+        s.F = max(g + p.h(s), b.F);
+    while (1) {
+        sort(successors.begin(), successors.end(), ascF);
+        Board &best = successors[0];
+        if (best.F > f_limit) return best.F;
+        int new_f_limit = min(f_limit, successors[1].F);
+        path.push_back(best);
+        best.F = RBFS(path, p, g + 1, new_f_limit, nodes_expanded);
+        if (best.F <= new_f_limit) return best.F;
+        path.pop_back();
     }
 }
 
-void update_f_values(Solution *node) {
-       
+vector<Board> RecursiveBestFirst(Board &start, Problem &p, int &nodes_expanded) {
+    start.F = p.h(start);
+    vector<Board> path{start};
+    RBFS(path, p, 1, INT_MAX, nodes_expanded);
+    return path;
 }
 
-void best_f(Solution node)
-{
+
+void csv_write_headers(std::ofstream& f) {
+	f << "Board_ID, Scramble_Number, Algorithm, Heuristic, Moves, Nodes_Expanded, Computation_Time(us)" << endl;
 }
 
-bool best_f_gt_f_limit(Solution node, double f_limit)
-{
-}
-
-void mark_alternative(Solution node)
-{
-}
-
-struct solution *rbfs(Solution *node)
-{
-    if (goal_test())
-    {
-        return node;
-    }
-    if (add_successors(node))
-    {
-        update_f_values(node);
-        while (true)
-        {
-            best_f(node);
-            if (best_f_gt_f_limit(node, f_limit))
-            {
-                return node; //mark failure because best f-limit>current f-limit
-            }
-            else
-            {
-                mark_alternative(node); //second lowest f-value
-                //mark best then call rbfs(problem, best, min(f_limit, alternative) and add to path
-                //if resulting path != failure, return path solution
-            }
-        }
-    }
-    else
-    {
-        return node; //mark failure for no successors
-    }
-}
-
-struct solution *recursive_best_first_search()
-{
-    return rbfs(start);
-}
-
-*/
-
-void csv_write_headers(std::ofstream& f)
-{
-	f << "Scramble, Algorithm, Heuristic, Moves, NodesExpanded, CompTime" << endl;
-}
-
-void csv_write_row(std::ofstream& f, int scramble, string algo, string heuristic, int moves, int nodes_exp, int microseconds)
-{
-	f << scramble << "," << algo << "," << heuristic << "," << moves << "," << nodes_exp << "," << microseconds << endl;
+void csv_write_row(std::ofstream& f, int board_id, int scramble_num, string algo, string heuristic, int moves, int nodes_exp, int microseconds) {
+	f << board_id << "," << scramble_num << "," << algo << "," << heuristic << "," << moves << "," << nodes_exp << "," << microseconds << endl;
 }
 
 
@@ -424,32 +362,38 @@ int main() {
     ManhattanDistance md;
     LinearConflictMD  lc;
     InversionDistance id;
-    vector<Heuristic*> heuristics = {&md, &lc, &id};	
-	
-	std::ofstream csv_file;
+    vector<Heuristic*> heuristics = {&md, &lc, &id};
+
+    std::ofstream csv_file;
 	csv_file.open("pa2.csv");
 	csv_write_headers(csv_file);
 
+    int b_id = 0;
     for (int m = 10; m <= 50; m += 10) {
         for (int n = 0; n < 10; ++n) {
             for (Heuristic* h : heuristics) {
                     Problem p(*h);
                     Board start = p.scramble(m);
+                    ++b_id;
+                    
+                    // IDA* Algorithm
                     int nodes_expanded = 0;
                     chrono::time_point<chrono::high_resolution_clock> t0, t1;
                     t0 = chrono::high_resolution_clock::now();
-                    vector<Board> solution = ID_A_star(start, p, nodes_expanded);
+                    vector<Board> solution_A_star = ID_A_star(start, p, nodes_expanded);
                     t1 = chrono::high_resolution_clock::now();
                     chrono::microseconds duration = chrono::duration_cast<chrono::microseconds>(t1 - t0);
-                    p.print(solution);
-					csv_write_row(csv_file, m, "IDA*", h->get_name(), solution.size() - 1, nodes_expanded, duration.count());
-                    cout << "Scramble number:\t" << m << endl;
-                    cout << "Algorithm:\t\t\t\t" << "IDA*" << endl;
-                    cout << "Heuristic:\t\t\t\t" << h->get_name() << endl;
-                    cout << "Moves:\t\t\t\t\t\t" << solution.size() - 1 << endl;
-                    cout << "Nodes expanded:\t\t" << nodes_expanded << endl;
-                    cout << "Computation time:\t" << duration.count() << " microseconds" << endl;
-                    cout << endl;
+                    //p.print(solution);
+                    csv_write_row(csv_file, b_id, m, "IDA*", h->get_name(), solution_A_star.size() - 1, nodes_expanded, duration.count());
+
+                    // RBFS Algorithm
+                    nodes_expanded = 0;
+                    t0 = chrono::high_resolution_clock::now();
+                    vector<Board> solution_RBFS = RecursiveBestFirst(start, p, nodes_expanded);
+                    t1 = chrono::high_resolution_clock::now();
+                    duration = chrono::duration_cast<chrono::microseconds>(t1 - t0);
+                    //p.print(solution);
+					csv_write_row(csv_file, b_id, m, "RBFS", h->get_name(), solution_RBFS.size() - 1, nodes_expanded, duration.count());
             }
         }
     }
