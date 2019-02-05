@@ -180,26 +180,10 @@ class LinearConflictMD : public ManhattanDistance {
 		}
 		return count;
 	}
-	
-	int getMD(Board &b)
-	{
-		int MD = 0;
-		for (int i = 0; i < 16; ++i) {
-			int x = i / 4;
-			int y = i % 4;
-			int v = b.board[x][y];
-			if (v > 0) {
-				int x_dest = (v - 1) / 4;
-				int y_dest = (v - 1) % 4;
-				MD += abs(x - x_dest) + abs(y - y_dest);
-			}
-		}
-		return MD;
-	}
 
 public:
     virtual int operator()(Board &b) {
-		return getMD(b) + getRowCount(b)*2;
+		return ManhattanDistance::operator()(b) + getRowCount(b)*2;
     }
 
     virtual string get_name() {
