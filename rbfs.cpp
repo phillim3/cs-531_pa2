@@ -26,6 +26,8 @@ public:
     int i_cord;
     int j_cord;
     int f_value;
+    int g_value;
+    unsigned int node_name;
     Board *parent;
     vector<Board> children;
     
@@ -46,34 +48,30 @@ public:
     Board& up() {
         swap(board[i_cord][j_cord], board[i_cord - 1][j_cord]);
         --i_cord;
-        cout << "test22" << endl;
         return *this;
     }
 
     Board& down() {
         swap(board[i_cord][j_cord], board[i_cord + 1][j_cord]);
         ++i_cord;
-        cout << "test23" << endl;
         return *this;
     }
 
     Board& left() {
         swap(board[i_cord][j_cord], board[i_cord][j_cord - 1]);
         --j_cord;
-        cout << "test24" << endl;
         return *this;
     }
 
     Board& right() {
         swap(board[i_cord][j_cord], board[i_cord][j_cord + 1]);
         ++j_cord;
-        cout << "test25" << endl;
         return *this;
     }
 
     int best_child_f_value()
     {
-        int best=10000;
+        int best=children[0].f_value;
         for(Board &c: children)
         {
             if(c.f_value<best)
@@ -86,13 +84,14 @@ public:
 
     int second_best_f_value()
     {
-        int best=10000;
+        int best_child=this->best_child_f_value();
+        int second_best=10000;
         int f_alt=10000;
         for(Board &c: children)
         {
-            if(c.f_value-f_value>0 && c.f_value-f_value<best)
+            if(c.f_value-best_child>0 && c.f_value-best_child<second_best)
             {
-                best=c.f_value-f_value;
+                second_best=c.f_value-best_child;
                 f_alt=c.f_value;
             }
         }
@@ -101,14 +100,15 @@ public:
 
     Board& best_child()
     {
+        int f=best_child_f_value();
         for(Board &c : children)
         {
-            if(f_value==c.f_value)
+            if(c.f_value==f)
             {
+                f=c.f_value;
                 return c;
             }
         }
-        cout << "Something is wrong" << endl;
     } 
 
     void print() {
@@ -288,15 +288,10 @@ public:
 
     vector<Board> successors(Board &b) {
         vector<Board> succ;
-        cout << "test19" << endl;
         if (b.i_cord > 0) succ.emplace_back(Board(b).up());
-        cout << "test15" << endl;
         if (b.i_cord < 3) succ.emplace_back(Board(b).down());
-        cout << "test16" << endl;
         if (b.j_cord > 0) succ.emplace_back(Board(b).left());
-        cout << "test17" << endl;
         if (b.j_cord < 3) succ.emplace_back(Board(b).right());
-        cout << "test18" << endl;
         return succ;
     }
 
@@ -348,29 +343,42 @@ Board* rbfs(Board &node, Problem &p, int &nodes_expanded)
     {
         return &node;
     }
-    if(node.children.size()==0)
+    cout<<"test2 "<<node.children.size()<<endl;
+    //node.print();
+    if(node.children.empty())
     {
-        cout << "test11" << endl;
-        node.print();
         node.children=p.successors(node); //add children then update their f-values
-        cout << "test12" << endl;
         for(Board &c : node.children)
         {
-            c.f_value=p.h(c);
+            c.node_name=rand()%10000;
             c.parent=&node;
+            c.g_value=node.g_value+1;
+            //cout<<"test4 "<<c.g_value<<endl;
+            //node.print();
+            c.f_value=c.g_value+p.h(c);
+            //if(node.i_cord==c.i_cord && node.j_cord==c.j_cord)
+            //{
+            //    c.f_value=10000;
+            //}
         }
     }
+    //cout<<"test3"<<endl;
     while(true)
     {
+        cout<<"test6"<<endl;
         node.f_value=node.best_child_f_value();
         if(node.f_value>p.f_alternative)
         {
+
+            cout<<"test5 "<<node.f_value<<", "<<p.h(node)<<", "<<node.g_value<<", "<<p.f_alternative<<endl;
             return NULL;
         }
         if(node.second_best_f_value()<p.f_alternative)
         {
             p.f_alternative=node.second_best_f_value();
         }
+        cout<<"node "<<node.best_child().node_name<<endl;
+        //pause(node.best_child(),p,nodes_expanded);
         ref=rbfs(node.best_child(),p,nodes_expanded);
         if(ref!=NULL)
         {
@@ -381,8 +389,10 @@ Board* rbfs(Board &node, Problem &p, int &nodes_expanded)
 
 Board* RecursiveBestFirst(Board &start, Problem &p, int &nodes_expanded)
 {
-    start.f_value = p.h(start);
-    p.f_alternative=p.h(start);
+    start.f_value = 10000;
+    start.g_value=0;
+    p.f_alternative=10000;
+    start.node_name=rand()%10000;
     return rbfs(start,p,nodes_expanded);
 }
 
@@ -392,7 +402,7 @@ int main() {
     InversionDistance id;
 
     vector<Heuristic*> heuristics;
-    //heuristics.push_back(&md);
+    heuristics.push_back(&md);
     heuristics.push_back(&lc);
     heuristics.push_back(&id);
     for (int m = 10; m <= 50; m += 10) {
@@ -409,16 +419,16 @@ int main() {
                     final_board=RecursiveBestFirst(start, p, nodes_expanded);
                     t1 = chrono::high_resolution_clock::now();
                     chrono::microseconds duration = chrono::duration_cast<chrono::microseconds>(t1 - t0);
-                    p.create_solution(final_board,solution);
-                    cout << "test1" << endl;
+                    //cout<<"test1"<<endl;
+                    //p.create_solution(final_board,solution);
                     //p.print(solution);
-                    //cout << "Scramble number:\t" << m << endl;
-                    //cout << "Algorithm:\t\t\t\t" << "RBFS" << endl;
-                    //cout << "Heuristic:\t\t\t\t" << h->get_name() << endl;
-                    //cout << "Moves:\t\t\t\t\t\t" << solution.size() - 1 << endl;
-                    //cout << "Nodes expanded:\t\t" << nodes_expanded << endl;
-                    //cout << "Computation time:\t" << duration.count() << " microseconds" << endl;
-                    //cout << endl;
+                    cout << "Scramble number:\t" << m << endl;
+                    cout << "Algorithm:\t\t\t\t" << "RBFS" << endl;
+                    cout << "Heuristic:\t\t\t\t" << h->get_name() << endl;
+                    cout << "Moves:\t\t\t\t\t\t" << solution.size() - 1 << endl;
+                    cout << "Nodes expanded:\t\t" << nodes_expanded << endl;
+                    cout << "Computation time:\t" << duration.count() << " microseconds" << endl;
+                    cout << endl;
             }
         }
     }
