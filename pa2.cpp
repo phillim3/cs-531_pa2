@@ -154,11 +154,9 @@ public:
 class LinearConflictMD : public ManhattanDistance {
 	Board solved = Board();
 
-	bool isValidForRow(int row, int x)
+	inline bool isValidForRow(int row, int x)
 	{
-		if (x >= solved.board[row][0] && x <= solved.board[row][Board::COLS-1])
-			return true;
-		return false;
+		return (x >= solved.board[row][0] && x <= solved.board[row][Board::COLS - 1]);
 	}
 
 	int getRowCount(Board &b)
