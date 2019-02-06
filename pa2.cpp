@@ -367,27 +367,28 @@ void csv_write_row(std::ofstream& f, int board_id, int scramble_num, string algo
 	f << board_id << "," << scramble_num << "," << algo << "," << heuristic << "," << moves << "," << nodes_exp << "," << microseconds << endl;
 }
 
-
 int main()
 {
-	const int NUM_TRIALS = 10;
+	const int TOTAL_TRIALS = 10;
     ManhattanDistance md;
     LinearConflictMD  lc;
     InversionDistance id;
     vector<Heuristic*> heuristics = {&md, &lc, &id};
 
     std::ofstream csv_file;
-	string filename = "pa2-" + std::to_string(NUM_TRIALS) + ".csv";	
+	string filename = "pa2-" + std::to_string(TOTAL_TRIALS) + ".csv";	
 	csv_file.open(filename);
 	csv_write_headers(csv_file);
 
     int b_id = 0;
     for (int scramble_size = 10; scramble_size <= 50; scramble_size += 10) {
-		cout << "Scamble:" << scramble_size << endl;
-        for (int num_trials = 0; num_trials < NUM_TRIALS; num_trials++) {
+		cout << "Scramble size: " << scramble_size << " trial: ";
+        for (int num_trials = 0; num_trials < TOTAL_TRIALS; num_trials++) {
+			if (num_trials % 10 == 0)
+				cout << num_trials << " ";
             for (Heuristic* heuristic : heuristics) {
                     Problem p_ida(*heuristic);
-                    Board start_ida = p_ida.scramble(scramble_size);
+                    Board start_ida = p_ida.scramble(scramble_size);					
 					Board start_rbfs = start_ida;
                     ++b_id;
                     
@@ -402,7 +403,7 @@ int main()
                     csv_write_row(csv_file, b_id, scramble_size, "IDA*", heuristic->get_name(), solution_A_star.size() - 1, nodes_expanded, duration.count());
 
                     // RBFS Algorithm
-					Problem p_rbfs(*heuristic);
+					Problem p_rbfs(*heuristic);					
                     nodes_expanded = 0;
                     t0 = chrono::high_resolution_clock::now();
                     vector<Board> solution_RBFS = RecursiveBestFirst(start_rbfs, p_rbfs, nodes_expanded);
@@ -412,6 +413,7 @@ int main()
 					csv_write_row(csv_file, b_id, scramble_size, "RBFS", heuristic->get_name(), solution_RBFS.size() - 1, nodes_expanded, duration.count());
             }
         }
+		cout << endl;
     }
 	csv_file.close();
 }
