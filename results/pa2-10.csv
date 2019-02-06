@@ -1,0 +1,301 @@
+Board_ID, Scramble_Number, Algorithm, Heuristic, Moves, Nodes_Expanded, Computation_Time(us)
+1,10,IDA*,Manhattan Distance,0,1,2
+1,10,RBFS,Manhattan Distance,0,1,0
+2,10,IDA*,MD + Linear Conflict Correction,2,5,7
+2,10,RBFS,MD + Linear Conflict Correction,2,3,3
+3,10,IDA*,Inversion Distance,6,13,36
+3,10,RBFS,Inversion Distance,6,9,27
+4,10,IDA*,Manhattan Distance,4,11,11
+4,10,RBFS,Manhattan Distance,4,5,5
+5,10,IDA*,MD + Linear Conflict Correction,6,11,13
+5,10,RBFS,MD + Linear Conflict Correction,6,7,7
+6,10,IDA*,Inversion Distance,4,11,33
+6,10,RBFS,Inversion Distance,4,5,17
+7,10,IDA*,Manhattan Distance,0,1,1
+7,10,RBFS,Manhattan Distance,0,1,0
+8,10,IDA*,MD + Linear Conflict Correction,8,43,43
+8,10,RBFS,MD + Linear Conflict Correction,10,68,63
+9,10,IDA*,Inversion Distance,4,6,13
+9,10,RBFS,Inversion Distance,4,5,15
+10,10,IDA*,Manhattan Distance,4,12,7
+10,10,RBFS,Manhattan Distance,4,5,4
+11,10,IDA*,MD + Linear Conflict Correction,2,4,2
+11,10,RBFS,MD + Linear Conflict Correction,2,3,1
+12,10,IDA*,Inversion Distance,4,8,12
+12,10,RBFS,Inversion Distance,4,5,13
+13,10,IDA*,Manhattan Distance,4,9,5
+13,10,RBFS,Manhattan Distance,4,5,3
+14,10,IDA*,MD + Linear Conflict Correction,2,5,3
+14,10,RBFS,MD + Linear Conflict Correction,2,3,2
+15,10,IDA*,Inversion Distance,4,11,16
+15,10,RBFS,Inversion Distance,4,5,14
+16,10,IDA*,Manhattan Distance,2,4,2
+16,10,RBFS,Manhattan Distance,2,3,1
+17,10,IDA*,MD + Linear Conflict Correction,4,7,4
+17,10,RBFS,MD + Linear Conflict Correction,4,5,3
+18,10,IDA*,Inversion Distance,4,11,15
+18,10,RBFS,Inversion Distance,4,5,15
+19,10,IDA*,Manhattan Distance,8,17,13
+19,10,RBFS,Manhattan Distance,8,9,7
+20,10,IDA*,MD + Linear Conflict Correction,2,4,2
+20,10,RBFS,MD + Linear Conflict Correction,2,3,1
+21,10,IDA*,Inversion Distance,6,8,15
+21,10,RBFS,Inversion Distance,6,7,19
+22,10,IDA*,Manhattan Distance,0,1,0
+22,10,RBFS,Manhattan Distance,0,1,0
+23,10,IDA*,MD + Linear Conflict Correction,8,21,23
+23,10,RBFS,MD + Linear Conflict Correction,8,11,10
+24,10,IDA*,Inversion Distance,4,10,14
+24,10,RBFS,Inversion Distance,4,5,583
+25,10,IDA*,Manhattan Distance,2,7,5
+25,10,RBFS,Manhattan Distance,2,3,1
+26,10,IDA*,MD + Linear Conflict Correction,8,27,21
+26,10,RBFS,MD + Linear Conflict Correction,10,16,14
+27,10,IDA*,Inversion Distance,2,7,10
+27,10,RBFS,Inversion Distance,2,3,8
+28,10,IDA*,Manhattan Distance,10,16,12
+28,10,RBFS,Manhattan Distance,10,11,9
+29,10,IDA*,MD + Linear Conflict Correction,6,11,8
+29,10,RBFS,MD + Linear Conflict Correction,6,7,5
+30,10,IDA*,Inversion Distance,0,1,2
+30,10,RBFS,Inversion Distance,0,1,1
+31,20,IDA*,Manhattan Distance,6,11,9
+31,20,RBFS,Manhattan Distance,6,7,6
+32,20,IDA*,MD + Linear Conflict Correction,8,13,11
+32,20,RBFS,MD + Linear Conflict Correction,8,9,7
+33,20,IDA*,Inversion Distance,8,21,31
+33,20,RBFS,Inversion Distance,8,25,63
+34,20,IDA*,Manhattan Distance,8,16,10
+34,20,RBFS,Manhattan Distance,8,9,6
+35,20,IDA*,MD + Linear Conflict Correction,6,12,8
+35,20,RBFS,MD + Linear Conflict Correction,6,7,6
+36,20,IDA*,Inversion Distance,14,52,77
+36,20,RBFS,Inversion Distance,14,27,77
+37,20,IDA*,Manhattan Distance,6,14,8
+37,20,RBFS,Manhattan Distance,6,7,5
+38,20,IDA*,MD + Linear Conflict Correction,12,22,15
+38,20,RBFS,MD + Linear Conflict Correction,12,13,10
+39,20,IDA*,Inversion Distance,6,15,21
+39,20,RBFS,Inversion Distance,6,7,21
+40,20,IDA*,Manhattan Distance,6,12,7
+40,20,RBFS,Manhattan Distance,6,7,4
+41,20,IDA*,MD + Linear Conflict Correction,8,38,24
+41,20,RBFS,MD + Linear Conflict Correction,10,16,12
+42,20,IDA*,Inversion Distance,4,10,14
+42,20,RBFS,Inversion Distance,4,5,15
+43,20,IDA*,Manhattan Distance,10,23,13
+43,20,RBFS,Manhattan Distance,10,11,8
+44,20,IDA*,MD + Linear Conflict Correction,6,26,15
+44,20,RBFS,MD + Linear Conflict Correction,8,24,17
+45,20,IDA*,Inversion Distance,8,14,22
+45,20,RBFS,Inversion Distance,8,9,26
+46,20,IDA*,Manhattan Distance,2,4,2
+46,20,RBFS,Manhattan Distance,2,3,1
+47,20,IDA*,MD + Linear Conflict Correction,14,42,26
+47,20,RBFS,MD + Linear Conflict Correction,16,17,12
+48,20,IDA*,Inversion Distance,4,12,16
+48,20,RBFS,Inversion Distance,4,5,15
+49,20,IDA*,Manhattan Distance,10,32,19
+49,20,RBFS,Manhattan Distance,10,16,11
+50,20,IDA*,MD + Linear Conflict Correction,4,9,5
+50,20,RBFS,MD + Linear Conflict Correction,4,5,4
+51,20,IDA*,Inversion Distance,4,10,14
+51,20,RBFS,Inversion Distance,4,5,15
+52,20,IDA*,Manhattan Distance,10,27,15
+52,20,RBFS,Manhattan Distance,10,22,13
+53,20,IDA*,MD + Linear Conflict Correction,6,11,7
+53,20,RBFS,MD + Linear Conflict Correction,6,7,5
+54,20,IDA*,Inversion Distance,10,49,68
+54,20,RBFS,Inversion Distance,10,21,64
+55,20,IDA*,Manhattan Distance,4,8,5
+55,20,RBFS,Manhattan Distance,4,5,3
+56,20,IDA*,MD + Linear Conflict Correction,16,137,82
+56,20,RBFS,MD + Linear Conflict Correction,18,513,430
+57,20,IDA*,Inversion Distance,6,12,22
+57,20,RBFS,Inversion Distance,6,7,20
+58,20,IDA*,Manhattan Distance,12,40,24
+58,20,RBFS,Manhattan Distance,12,19,14
+59,20,IDA*,MD + Linear Conflict Correction,10,32,21
+59,20,RBFS,MD + Linear Conflict Correction,12,13,11
+60,20,IDA*,Inversion Distance,10,22,34
+60,20,RBFS,Inversion Distance,10,11,36
+61,30,IDA*,Manhattan Distance,14,111,84
+61,30,RBFS,Manhattan Distance,14,24,18
+62,30,IDA*,MD + Linear Conflict Correction,8,16,11
+62,30,RBFS,MD + Linear Conflict Correction,8,9,7
+63,30,IDA*,Inversion Distance,10,16,26
+63,30,RBFS,Inversion Distance,10,11,31
+64,30,IDA*,Manhattan Distance,6,11,7
+64,30,RBFS,Manhattan Distance,6,7,5
+65,30,IDA*,MD + Linear Conflict Correction,14,60,38
+65,30,RBFS,MD + Linear Conflict Correction,14,89,66
+66,30,IDA*,Inversion Distance,12,124,181
+66,30,RBFS,Inversion Distance,12,67,219
+67,30,IDA*,Manhattan Distance,16,172,95
+67,30,RBFS,Manhattan Distance,16,695,408
+68,30,IDA*,MD + Linear Conflict Correction,12,23,16
+68,30,RBFS,MD + Linear Conflict Correction,12,13,10
+69,30,IDA*,Inversion Distance,6,15,22
+69,30,RBFS,Inversion Distance,6,7,21
+70,30,IDA*,Manhattan Distance,14,48,45
+70,30,RBFS,Manhattan Distance,14,30,18
+71,30,IDA*,MD + Linear Conflict Correction,8,15,10
+71,30,RBFS,MD + Linear Conflict Correction,8,9,6
+72,30,IDA*,Inversion Distance,12,22,31
+72,30,RBFS,Inversion Distance,12,13,40
+73,30,IDA*,Manhattan Distance,18,301,166
+73,30,RBFS,Manhattan Distance,18,1363,1273
+74,30,IDA*,MD + Linear Conflict Correction,18,100,63
+74,30,RBFS,MD + Linear Conflict Correction,20,174,109
+75,30,IDA*,Inversion Distance,14,250,334
+75,30,RBFS,Inversion Distance,14,202,672
+76,30,IDA*,Manhattan Distance,4,11,7
+76,30,RBFS,Manhattan Distance,4,5,3
+77,30,IDA*,MD + Linear Conflict Correction,8,14,10
+77,30,RBFS,MD + Linear Conflict Correction,8,9,7
+78,30,IDA*,Inversion Distance,18,720,1022
+78,30,RBFS,Inversion Distance,18,896,2843
+79,30,IDA*,Manhattan Distance,8,23,17
+79,30,RBFS,Manhattan Distance,8,21,12
+80,30,IDA*,MD + Linear Conflict Correction,10,21,14
+80,30,RBFS,MD + Linear Conflict Correction,10,11,8
+81,30,IDA*,Inversion Distance,6,11,16
+81,30,RBFS,Inversion Distance,6,7,26
+82,30,IDA*,Manhattan Distance,10,55,29
+82,30,RBFS,Manhattan Distance,10,162,81
+83,30,IDA*,MD + Linear Conflict Correction,10,23,13
+83,30,RBFS,MD + Linear Conflict Correction,10,11,9
+84,30,IDA*,Inversion Distance,10,26,34
+84,30,RBFS,Inversion Distance,10,13,32
+85,30,IDA*,Manhattan Distance,8,13,8
+85,30,RBFS,Manhattan Distance,8,9,5
+86,30,IDA*,MD + Linear Conflict Correction,8,28,17
+86,30,RBFS,MD + Linear Conflict Correction,10,11,9
+87,30,IDA*,Inversion Distance,10,18,29
+87,30,RBFS,Inversion Distance,10,11,35
+88,30,IDA*,Manhattan Distance,16,80,43
+88,30,RBFS,Manhattan Distance,16,232,129
+89,30,IDA*,MD + Linear Conflict Correction,12,100,60
+89,30,RBFS,MD + Linear Conflict Correction,14,25,19
+90,30,IDA*,Inversion Distance,14,36,52
+90,30,RBFS,Inversion Distance,14,19,58
+91,40,IDA*,Manhattan Distance,18,269,127
+91,40,RBFS,Manhattan Distance,18,4297,2085
+92,40,IDA*,MD + Linear Conflict Correction,12,49,26
+92,40,RBFS,MD + Linear Conflict Correction,12,47,26
+93,40,IDA*,Inversion Distance,16,52,81
+93,40,RBFS,Inversion Distance,16,27,85
+94,40,IDA*,Manhattan Distance,14,23,14
+94,40,RBFS,Manhattan Distance,14,15,9
+95,40,IDA*,MD + Linear Conflict Correction,14,240,151
+95,40,RBFS,MD + Linear Conflict Correction,18,245,155
+96,40,IDA*,Inversion Distance,8,38,52
+96,40,RBFS,Inversion Distance,8,11,32
+97,40,IDA*,Manhattan Distance,8,14,8
+97,40,RBFS,Manhattan Distance,8,9,5
+98,40,IDA*,MD + Linear Conflict Correction,4,11,6
+98,40,RBFS,MD + Linear Conflict Correction,4,5,3
+99,40,IDA*,Inversion Distance,6,12,18
+99,40,RBFS,Inversion Distance,6,7,19
+100,40,IDA*,Manhattan Distance,18,572,514
+100,40,RBFS,Manhattan Distance,18,2684,1294
+101,40,IDA*,MD + Linear Conflict Correction,18,289,144
+101,40,RBFS,MD + Linear Conflict Correction,18,657,368
+102,40,IDA*,Inversion Distance,14,44,69
+102,40,RBFS,Inversion Distance,14,15,49
+103,40,IDA*,Manhattan Distance,28,5143,2581
+103,40,RBFS,Manhattan Distance,28,640535,317590
+104,40,IDA*,MD + Linear Conflict Correction,16,116,73
+104,40,RBFS,MD + Linear Conflict Correction,18,19,15
+105,40,IDA*,Inversion Distance,10,16,28
+105,40,RBFS,Inversion Distance,10,11,32
+106,40,IDA*,Manhattan Distance,12,307,161
+106,40,RBFS,Manhattan Distance,12,1283,683
+107,40,IDA*,MD + Linear Conflict Correction,20,2221,1270
+107,40,RBFS,MD + Linear Conflict Correction,20,81317,45468
+108,40,IDA*,Inversion Distance,12,22,41
+108,40,RBFS,Inversion Distance,12,15,46
+109,40,IDA*,Manhattan Distance,8,16,10
+109,40,RBFS,Manhattan Distance,8,9,5
+110,40,IDA*,MD + Linear Conflict Correction,28,985,551
+110,40,RBFS,MD + Linear Conflict Correction,28,5700,3082
+111,40,IDA*,Inversion Distance,12,41,64
+111,40,RBFS,Inversion Distance,12,13,41
+112,40,IDA*,Manhattan Distance,14,23,15
+112,40,RBFS,Manhattan Distance,14,15,10
+113,40,IDA*,MD + Linear Conflict Correction,8,24,16
+113,40,RBFS,MD + Linear Conflict Correction,8,13,10
+114,40,IDA*,Inversion Distance,12,43,64
+114,40,RBFS,Inversion Distance,12,19,66
+115,40,IDA*,Manhattan Distance,8,16,10
+115,40,RBFS,Manhattan Distance,8,9,6
+116,40,IDA*,MD + Linear Conflict Correction,18,263,154
+116,40,RBFS,MD + Linear Conflict Correction,18,417,209
+117,40,IDA*,Inversion Distance,6,10,15
+117,40,RBFS,Inversion Distance,6,7,18
+118,40,IDA*,Manhattan Distance,16,90,46
+118,40,RBFS,Manhattan Distance,16,43,23
+119,40,IDA*,MD + Linear Conflict Correction,12,37,20
+119,40,RBFS,MD + Linear Conflict Correction,12,15,9
+120,40,IDA*,Inversion Distance,12,30,42
+120,40,RBFS,Inversion Distance,12,13,37
+121,50,IDA*,Manhattan Distance,18,68,36
+121,50,RBFS,Manhattan Distance,18,59,29
+122,50,IDA*,MD + Linear Conflict Correction,30,29704,15423
+122,50,RBFS,MD + Linear Conflict Correction,30,14834813,7824600
+123,50,IDA*,Inversion Distance,14,82,117
+123,50,RBFS,Inversion Distance,14,29,81
+124,50,IDA*,Manhattan Distance,14,190,92
+124,50,RBFS,Manhattan Distance,14,755,369
+125,50,IDA*,MD + Linear Conflict Correction,14,118,64
+125,50,RBFS,MD + Linear Conflict Correction,16,313,183
+126,50,IDA*,Inversion Distance,14,21,32
+126,50,RBFS,Inversion Distance,14,15,41
+127,50,IDA*,Manhattan Distance,12,22,12
+127,50,RBFS,Manhattan Distance,12,13,7
+128,50,IDA*,MD + Linear Conflict Correction,30,18977,9636
+128,50,RBFS,MD + Linear Conflict Correction,30,3312402,1775894
+129,50,IDA*,Inversion Distance,8,13,24
+129,50,RBFS,Inversion Distance,8,9,25
+130,50,IDA*,Manhattan Distance,18,72,43
+130,50,RBFS,Manhattan Distance,18,38,23
+131,50,IDA*,MD + Linear Conflict Correction,22,46,31
+131,50,RBFS,MD + Linear Conflict Correction,22,27,20
+132,50,IDA*,Inversion Distance,26,3199,4752
+132,50,RBFS,Inversion Distance,26,21233,67986
+133,50,IDA*,Manhattan Distance,18,110,63
+133,50,RBFS,Manhattan Distance,18,85,44
+134,50,IDA*,MD + Linear Conflict Correction,22,1719,998
+134,50,RBFS,MD + Linear Conflict Correction,24,10680,5531
+135,50,IDA*,Inversion Distance,10,15,24
+135,50,RBFS,Inversion Distance,10,11,40
+136,50,IDA*,Manhattan Distance,14,21,12
+136,50,RBFS,Manhattan Distance,14,15,8
+137,50,IDA*,MD + Linear Conflict Correction,16,673,323
+137,50,RBFS,MD + Linear Conflict Correction,18,16085,8779
+138,50,IDA*,Inversion Distance,10,19,27
+138,50,RBFS,Inversion Distance,10,11,31
+139,50,IDA*,Manhattan Distance,10,21,12
+139,50,RBFS,Manhattan Distance,10,26,13
+140,50,IDA*,MD + Linear Conflict Correction,14,41,24
+140,50,RBFS,MD + Linear Conflict Correction,14,28,19
+141,50,IDA*,Inversion Distance,14,220,294
+141,50,RBFS,Inversion Distance,14,235,772
+142,50,IDA*,Manhattan Distance,18,145,71
+142,50,RBFS,Manhattan Distance,18,1121,578
+143,50,IDA*,MD + Linear Conflict Correction,18,49,27
+143,50,RBFS,MD + Linear Conflict Correction,18,46,29
+144,50,IDA*,Inversion Distance,20,968,1332
+144,50,RBFS,Inversion Distance,20,6935,22353
+145,50,IDA*,Manhattan Distance,20,237,120
+145,50,RBFS,Manhattan Distance,20,456,213
+146,50,IDA*,MD + Linear Conflict Correction,8,21,13
+146,50,RBFS,MD + Linear Conflict Correction,8,11,8
+147,50,IDA*,Inversion Distance,14,33,46
+147,50,RBFS,Inversion Distance,14,16,45
+148,50,IDA*,Manhattan Distance,14,506,242
+148,50,RBFS,Manhattan Distance,14,4420,2100
+149,50,IDA*,MD + Linear Conflict Correction,22,10041,5137
+149,50,RBFS,MD + Linear Conflict Correction,24,880716,520533
+150,50,IDA*,Inversion Distance,18,112,163
+150,50,RBFS,Inversion Distance,18,94,301
