@@ -172,17 +172,11 @@ class LinearConflictMD : public ManhattanDistance {
         return (x >= solved.board[row][0] && x <= solved.board[row][Board::COLS - 1]);
     }
 
-    inline bool isAlreadyUsed(std::unordered_set<int> s, int val)
-    {
-        return (s.find(val) != s.end());        
-    }
-
-    int old_getRowCount(Board &b)
+    int getRowCount(Board &b)
     {
         int count = 0;
         for (int row = 0; row < Board::ROWS; row++)
         {
-            int used[4] = { -1, -1, -1, -1 };
             for (int column = 0; column < Board::COLS - 2; column++)
             {
                 int left = b.board[row][column];
@@ -195,47 +189,12 @@ class LinearConflictMD : public ManhattanDistance {
                 }
             }
         }
-        return count*2;
-    }
-
-
-
-    int getRowCount(Board &b)
-    {
-        int count = 0;
-        for (int row = 0; row < Board::ROWS; row++)
-        {
-            std::unordered_set<int> used;
-            for (int column = 0; column < Board::COLS - 2; column++)
-            {
-                int left = b.board[row][column];
-                int right = b.board[row][column + 1];                
-                if (isValidForRow(row, left) && isValidForRow(row, right))
-                {
-                    if (left > right)
-                    {                        
-                        if (!isAlreadyUsed(used, left))
-                        {
-                            used.insert(left);
-                            count++;
-                        }
-
-                        if (!isAlreadyUsed(used, right))
-                        {
-                            used.insert(right);
-                            count++;
-                        }
-                    }
-                }
-            }
-        }
         return count;
     }
 
-
 public:
     virtual int operator()(Board &b) {
-        return ManhattanDistance::operator()(b) + getRowCount(b);
+        return ManhattanDistance::operator()(b) + getRowCount(b) * 2;
     }
 
     virtual string get_name() {
@@ -368,34 +327,45 @@ vector<Board> ID_A_star(Board &start, Problem &p, int &nodes_expanded) {
 }
 
 /**********************
- *   RBFS Algorithm   *
+ *   RBFS Algorithm   *     // with path checking
  **********************/
 bool ascF(Board &b1, Board &b2) { return b1.F < b2.F; }
 
-int RBFS(vector<Board> &path, Problem &p, int g, int f_limit, int &nodes_expanded) {
+int RBFS(vector<Board> &path, unordered_set<Board> &pathSet, Problem &p, int g, int f_limit, int &nodes_expanded) {
     Board &b = path.back();
     ++nodes_expanded;
     if (p.goal_test(b)) return b.F;
-    vector<Board> successors = p.successors(b);
+    vector<Board> successors;
+    for (Board &s : p.successors(b)) {
+        if (pathSet.find(s) == pathSet.end()) { // only consider states not already visited on current path
+            s.F = max(g + p.h(s), b.F);         // (and their siblings, which are stored in memory as well)
+            successors.push_back(s);
+        }
+    }
     if (successors.empty()) return INT_MAX;
-    for (Board &s : successors)
-        s.F = max(g + p.h(s), b.F);
+    if (successors.size() == 1) {   // If there is only one successor,
+        successors.emplace_back();      // add a dummy element so we can use same logic in loop,
+        successors.back().F = INT_MAX;  // but make sure it never gets expanded.
+    }
     while (1) {
         sort(successors.begin(), successors.end(), ascF);
         Board &best = successors[0];
         if (best.F > f_limit) return best.F;
         int new_f_limit = min(f_limit, successors[1].F);
         path.push_back(best);
-        best.F = RBFS(path, p, g + 1, new_f_limit, nodes_expanded);
+        pathSet.insert(best);
+        best.F = RBFS(path, pathSet, p, g + 1, new_f_limit, nodes_expanded);
         if (best.F <= new_f_limit) return best.F;
         path.pop_back();
+        pathSet.erase(best);
     }
 }
 
 vector<Board> RecursiveBestFirst(Board &start, Problem &p, int &nodes_expanded) {
     start.F = p.h(start);
     vector<Board> path{ start };
-    RBFS(path, p, 1, INT_MAX, nodes_expanded);
+    unordered_set<Board> pathSet{ start };
+    RBFS(path, pathSet, p, 1, INT_MAX, nodes_expanded);
     return path;
 }
 
@@ -411,7 +381,7 @@ void csv_write_row(std::ofstream& f, int board_id, int scramble_num, string algo
 
 int main()
 {
-    const int TOTAL_TRIALS = 100;
+    const int TOTAL_TRIALS = 1000;
     LinearConflictMD  lc;
     ManhattanDistance md;
     InversionDistance id;
