@@ -171,7 +171,7 @@ class LinearConflictMD : public ManhattanDistance {
 				int left = b.board[row][column];
 				int right = b.board[row][column+1];
 				int correct_right = solved.board[row][column+1];
-				if (isValidForRow(row, left) && isValidForRow(row, right))
+				if (left == solved.board[row][column] && isValidForRow(row, right))
 				{
 					if (right != correct_right)
 						count++;
@@ -352,7 +352,7 @@ void csv_write_headers(std::ofstream& f) {
 	f << "Board_ID, Scramble_Number, Algorithm, Heuristic, Moves, Nodes_Expanded, Computation_Time(us)" << endl;
 }
 
-void csv_write_row(std::ofstream& f, int board_id, int scramble_num, string algo, string heuristic, int moves, int nodes_exp, int microseconds) {
+void csv_write_row(std::ofstream& f, int board_id, int scramble_num, string algo, string heuristic, size_t moves, int nodes_exp, int microseconds) {
 	f << board_id << "," << scramble_num << "," << algo << "," << heuristic << "," << moves << "," << nodes_exp << "," << microseconds << endl;
 }
 
@@ -370,6 +370,7 @@ int main() {
 
     int b_id = 0;
     for (int m = 10; m <= 50; m += 10) {
+		cout << "Scamble:" << m << endl;
         for (int n = 0; n < 10; ++n) {
             for (Heuristic* h : heuristics) {
                     Problem p(*h);
@@ -386,10 +387,12 @@ int main() {
                     //p.print(solution);
                     csv_write_row(csv_file, b_id, m, "IDA*", h->get_name(), solution_A_star.size() - 1, nodes_expanded, duration.count());
 
+					Problem p2(*h);
+					Board start2 = p2.scramble(m);
                     // RBFS Algorithm
                     nodes_expanded = 0;
                     t0 = chrono::high_resolution_clock::now();
-                    vector<Board> solution_RBFS = RecursiveBestFirst(start, p, nodes_expanded);
+                    vector<Board> solution_RBFS = RecursiveBestFirst(start2, p2, nodes_expanded);
                     t1 = chrono::high_resolution_clock::now();
                     duration = chrono::duration_cast<chrono::microseconds>(t1 - t0);
                     //p.print(solution);
@@ -397,6 +400,5 @@ int main() {
             }
         }
     }
-
 	csv_file.close();
 }
