@@ -172,11 +172,17 @@ class LinearConflictMD : public ManhattanDistance {
         return (x >= solved.board[row][0] && x <= solved.board[row][Board::COLS - 1]);
     }
 
-    int getRowCount(Board &b)
+    inline bool isAlreadyUsed(std::unordered_set<int> s, int val)
+    {
+        return (s.find(val) != s.end());        
+    }
+
+    int old_getRowCount(Board &b)
     {
         int count = 0;
         for (int row = 0; row < Board::ROWS; row++)
         {
+            int used[4] = { -1, -1, -1, -1 };
             for (int column = 0; column < Board::COLS - 2; column++)
             {
                 int left = b.board[row][column];
@@ -189,12 +195,47 @@ class LinearConflictMD : public ManhattanDistance {
                 }
             }
         }
+        return count*2;
+    }
+
+
+
+    int getRowCount(Board &b)
+    {
+        int count = 0;
+        for (int row = 0; row < Board::ROWS; row++)
+        {
+            std::unordered_set<int> used;
+            for (int column = 0; column < Board::COLS - 2; column++)
+            {
+                int left = b.board[row][column];
+                int right = b.board[row][column + 1];                
+                if (isValidForRow(row, left) && isValidForRow(row, right))
+                {
+                    if (left > right)
+                    {                        
+                        if (!isAlreadyUsed(used, left))
+                        {
+                            used.insert(left);
+                            count++;
+                        }
+
+                        if (!isAlreadyUsed(used, right))
+                        {
+                            used.insert(right);
+                            count++;
+                        }
+                    }
+                }
+            }
+        }
         return count;
     }
 
+
 public:
     virtual int operator()(Board &b) {
-        return ManhattanDistance::operator()(b) + getRowCount(b) * 2;
+        return ManhattanDistance::operator()(b) + getRowCount(b);
     }
 
     virtual string get_name() {
@@ -370,7 +411,7 @@ void csv_write_row(std::ofstream& f, int board_id, int scramble_num, string algo
 
 int main()
 {
-    const int TOTAL_TRIALS = 1000;
+    const int TOTAL_TRIALS = 100;
     LinearConflictMD  lc;
     ManhattanDistance md;
     InversionDistance id;
