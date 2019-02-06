@@ -370,9 +370,7 @@ void csv_write_row(std::ofstream& f, int board_id, int scramble_num, string algo
 
 int main()
 {
-	const int TOTAL_TRIALS = 10;
-    ManhattanDistance md;
-    LinearConflictMD  lc;
+	const int TOTAL_TRIALS = 1000;
 	LinearConflictMD  lc;
     ManhattanDistance md;    
     InversionDistance id;
@@ -382,14 +380,12 @@ int main()
 	string filename = "pa2-" + std::to_string(TOTAL_TRIALS) + ".csv";	
 	csv_file.open(filename);
 	csv_write_headers(csv_file);
-
     int b_id = 0;
-    for (int scramble_size = 10; scramble_size <= 50; scramble_size += 10) {
 
+	for (int scramble_size = 10; scramble_size <= 50; scramble_size += 10) {
 		cout << "Scramble size: " << scramble_size << " trial: ";
-        for (int num_trials = 0; num_trials < TOTAL_TRIALS; num_trials++) {
-			if (num_trials % 10 == 0)
 		for (int num_trials = 0; num_trials < TOTAL_TRIALS; num_trials++) {
+			if (num_trials % (TOTAL_TRIALS / 10) == 0)
 				cout << num_trials << " ";
 			for (Heuristic* heuristic : heuristics) {
 				Problem p_rbfs(*heuristic);
@@ -404,6 +400,7 @@ int main()
 				t1 = chrono::high_resolution_clock::now();
 				chrono::microseconds duration = chrono::duration_cast<chrono::microseconds>(t1 - t0);
 				//p.print(solution);
+				csv_write_row(csv_file, b_id, scramble_size, "RBFS", heuristic->get_name(), solution_RBFS.size() - 1, nodes_expanded, duration.count());
 			}
 		}
 		cout << endl;
