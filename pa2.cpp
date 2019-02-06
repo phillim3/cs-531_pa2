@@ -16,21 +16,21 @@ using namespace std;
 
 /**************************************
  * Board State class
- * 
+ *
  * Be wary, action functions do not check
  * whether the action is applicable
  * to the board state.
  **************************************/
 class Board {
 public:
-	static const uint32_t HASHSEED = 0x9747b28c;
+    static const uint32_t HASHSEED = 0x9747b28c;
     static const int ROWS = 4;
     static const int COLS = 4;
     int board[ROWS][COLS];
     int i_cord;
     int j_cord;
     int F;
-    
+
     enum Action { UP, DOWN, LEFT, RIGHT };
 
     Board() : i_cord(3), j_cord(3) {
@@ -39,15 +39,15 @@ public:
         board[3][3] = 0;
     }
 
-	Board(const Board &obj)
-	{	
-		for (int i = 0; i < 4; ++i)
-			for (int j = 0; j < 4; ++j)
-				board[i][j] = obj.board[i][j];
-		i_cord = obj.i_cord;
-		j_cord = obj.j_cord;
-		F = obj.F;
-	}
+    Board(const Board &obj)
+    {
+        for (int i = 0; i < 4; ++i)
+            for (int j = 0; j < 4; ++j)
+                board[i][j] = obj.board[i][j];
+        i_cord = obj.i_cord;
+        j_cord = obj.j_cord;
+        F = obj.F;
+    }
 
 
     Board(Board &b, Action a) : i_cord(b.i_cord), j_cord(b.j_cord) {
@@ -55,11 +55,11 @@ public:
             for (int j = 0; j < 4; ++j)
                 board[i][j] = b.board[i][j];
 
-        switch(a) {
-            case UP:    up();    break;
-            case DOWN:  down();  break;
-            case LEFT:  left();  break;
-            case RIGHT: right(); break;
+        switch (a) {
+        case UP:    up();    break;
+        case DOWN:  down();  break;
+        case LEFT:  left();  break;
+        case RIGHT: right(); break;
         }
     }
 
@@ -110,14 +110,14 @@ public:
 // Implement std::hash<Board> so we can use std::unordered_set<Board>
 namespace std
 {
-	template<>
-	struct hash<Board> {
-		size_t operator()(const Board &b) const {
-			uint32_t hash;
-			MurmurHash3_x86_32(&b.board, sizeof(b.board), Board::HASHSEED, &hash);
-			return hash;						
-		}
-	};
+    template<>
+    struct hash<Board> {
+        size_t operator()(const Board &b) const {
+            uint32_t hash;
+            MurmurHash3_x86_32(&b.board, sizeof(b.board), Board::HASHSEED, &hash);
+            return hash;
+        }
+    };
 }
 
 
@@ -165,36 +165,36 @@ public:
 // in any row. The same applies to every pair with the analogous problem in any column.
 //
 class LinearConflictMD : public ManhattanDistance {
-	Board solved = Board();
+    Board solved = Board();
 
-	inline bool isValidForRow(int row, int x)
-	{
-		return (x >= solved.board[row][0] && x <= solved.board[row][Board::COLS - 1]);
-	}
+    inline bool isValidForRow(int row, int x)
+    {
+        return (x >= solved.board[row][0] && x <= solved.board[row][Board::COLS - 1]);
+    }
 
-	int getRowCount(Board &b)
-	{
-		int count = 0;
-		for (int row = 0; row < Board::ROWS; row++)
-		{
-			for (int column = 0; column < Board::COLS-2; column++)
-			{				
-				int left = b.board[row][column];
-				int right = b.board[row][column+1];
-				int correct_right = solved.board[row][column+1];
-				if (left == solved.board[row][column] && isValidForRow(row, right))
-				{
-					if (right != correct_right)
-						count++;
-				}
-			}
-		}
-		return count;
-	}
+    int getRowCount(Board &b)
+    {
+        int count = 0;
+        for (int row = 0; row < Board::ROWS; row++)
+        {
+            for (int column = 0; column < Board::COLS - 2; column++)
+            {
+                int left = b.board[row][column];
+                int right = b.board[row][column + 1];
+                int correct_right = solved.board[row][column + 1];
+                if (left == solved.board[row][column] && isValidForRow(row, right))
+                {
+                    if (right != correct_right)
+                        count++;
+                }
+            }
+        }
+        return count;
+    }
 
 public:
     virtual int operator()(Board &b) {
-		return ManhattanDistance::operator()(b) + getRowCount(b)*2;
+        return ManhattanDistance::operator()(b) + getRowCount(b) * 2;
     }
 
     virtual string get_name() {
@@ -214,7 +214,7 @@ public:
                 int y = b.board[j / 4][j % 4];
                 if (x * y > 0) {    // ignore inversions with empty square
                     if (x > y) ++h_inv;
-                
+
                     // map to column major ordering
                     int vi = 4 * (i % 4) + i / 4;
                     int vj = 4 * (j % 4) + j / 4;
@@ -235,7 +235,7 @@ public:
 
 /*****************************************
  * Problem class
- * 
+ *
  * Contains the heuristic, successor, and
  * goal_test functions. Also contains a
  * scramble function, that generates
@@ -316,9 +316,9 @@ int DL_A_star(vector<Board> &path, unordered_set<Board> &pathSet, Problem &p, in
 
 vector<Board> ID_A_star(Board &start, Problem &p, int &nodes_expanded) {
     int f_limit = p.h(start);
-    vector<Board> path{start};
-    unordered_set<Board> pathSet{start};
-    while(1) {
+    vector<Board> path{ start };
+    unordered_set<Board> pathSet{ start };
+    while (1) {
         int f_min = DL_A_star(path, pathSet, p, 0, f_limit, nodes_expanded);
         if (f_min <= f_limit) return path;              // if goal is found, return path
         if (f_min == INT_MAX) return vector<Board>();   // if failure, return empty path
@@ -353,84 +353,84 @@ int RBFS(vector<Board> &path, Problem &p, int g, int f_limit, int &nodes_expande
 
 vector<Board> RecursiveBestFirst(Board &start, Problem &p, int &nodes_expanded) {
     start.F = p.h(start);
-    vector<Board> path{start};
+    vector<Board> path{ start };
     RBFS(path, p, 1, INT_MAX, nodes_expanded);
     return path;
 }
 
 
 void csv_write_headers(std::ofstream& f) {
-	f << "Board_ID, Scramble_Number, Algorithm, Heuristic, Moves, Nodes_Expanded, Computation_Time(us)" << endl;
+    f << "Board_ID, Scramble_Number, Algorithm, Heuristic, Moves, Nodes_Expanded, Computation_Time(us)" << endl;
 }
 
 void csv_write_row(std::ofstream& f, int board_id, int scramble_num, string algo, string heuristic, size_t moves, int nodes_exp, long microseconds) {
-	long micros = std::max(1L, microseconds);
-	f << board_id << "," << scramble_num << "," << algo << "," << heuristic << "," << moves << "," << nodes_exp << "," << micros << endl;
+    long micros = std::max(1L, microseconds);
+    f << board_id << "," << scramble_num << "," << algo << "," << heuristic << "," << moves << "," << nodes_exp << "," << micros << endl;
 }
 
 int main()
 {
-	const int TOTAL_TRIALS = 1000;
-	LinearConflictMD  lc;
-    ManhattanDistance md;    
+    const int TOTAL_TRIALS = 1000;
+    LinearConflictMD  lc;
+    ManhattanDistance md;
     InversionDistance id;
-    vector<Heuristic*> heuristics = {&md, &lc, &id};
+    vector<Heuristic*> heuristics = { &md, &lc, &id };
 
     std::ofstream csv_file;
-	string filename = "pa2-" + std::to_string(TOTAL_TRIALS) + ".csv";	
-	csv_file.open(filename);
-	csv_write_headers(csv_file);
+    string filename = "pa2-" + std::to_string(TOTAL_TRIALS) + ".csv";
+    csv_file.open(filename);
+    csv_write_headers(csv_file);
     int b_id = 0;
 
-	for (int scramble_size = 10; scramble_size <= 50; scramble_size += 10) {
-		cout << "Scramble size: " << scramble_size << " trial: ";
-		for (int num_trials = 0; num_trials < TOTAL_TRIALS; num_trials++) {
-			if (num_trials % (TOTAL_TRIALS / 10) == 0)
-				cout << num_trials << " ";
-			for (Heuristic* heuristic : heuristics) {
-				Problem p_rbfs(*heuristic);
-				Board start_rbfs = p_rbfs.scramble(scramble_size);				
-				++b_id;
+    for (int scramble_size = 10; scramble_size <= 50; scramble_size += 10) {
+        cout << "Scramble size: " << scramble_size << " trial: ";
+        for (int num_trials = 0; num_trials < TOTAL_TRIALS; num_trials++) {
+            if (num_trials % (TOTAL_TRIALS / 10) == 0)
+                cout << num_trials << " ";
+            for (Heuristic* heuristic : heuristics) {
+                Problem p_rbfs(*heuristic);
+                Board start_rbfs = p_rbfs.scramble(scramble_size);
+                ++b_id;
 
-				// RBFS Algorithm
-				int nodes_expanded = 0;
-				chrono::time_point<chrono::high_resolution_clock> t0, t1;
-				t0 = chrono::high_resolution_clock::now();
-				vector<Board> solution_RBFS = RecursiveBestFirst(start_rbfs, p_rbfs, nodes_expanded);
-				t1 = chrono::high_resolution_clock::now();
-				chrono::microseconds duration = chrono::duration_cast<chrono::microseconds>(t1 - t0);
-				//p.print(solution);
-				csv_write_row(csv_file, b_id, scramble_size, "RBFS", heuristic->get_name(), solution_RBFS.size() - 1, nodes_expanded, duration.count());
-			}
-		}
-		cout << endl;
-	}
+                // RBFS Algorithm
+                int nodes_expanded = 0;
+                chrono::time_point<chrono::high_resolution_clock> t0, t1;
+                t0 = chrono::high_resolution_clock::now();
+                vector<Board> solution_RBFS = RecursiveBestFirst(start_rbfs, p_rbfs, nodes_expanded);
+                t1 = chrono::high_resolution_clock::now();
+                chrono::microseconds duration = chrono::duration_cast<chrono::microseconds>(t1 - t0);
+                //p.print(solution);
+                csv_write_row(csv_file, b_id, scramble_size, "RBFS", heuristic->get_name(), solution_RBFS.size() - 1, nodes_expanded, duration.count());
+            }
+        }
+        cout << endl;
+    }
 
-	for (int scramble_size = 10; scramble_size <= 50; scramble_size += 10) {
-		cout << "Scramble size: " << scramble_size << " trial: ";
-		for (int num_trials = 0; num_trials < TOTAL_TRIALS; num_trials++) {
-			if (num_trials % (TOTAL_TRIALS / 10) == 0)
-				cout << num_trials << " ";
-			for (Heuristic* heuristic : heuristics) {
-				Problem p_ida(*heuristic);
-				Board start_ida = p_ida.scramble(scramble_size);
-				++b_id;
+    for (int scramble_size = 10; scramble_size <= 50; scramble_size += 10) {
+        cout << "Scramble size: " << scramble_size << " trial: ";
+        for (int num_trials = 0; num_trials < TOTAL_TRIALS; num_trials++) {
+            if (num_trials % (TOTAL_TRIALS / 10) == 0)
+                cout << num_trials << " ";
+            for (Heuristic* heuristic : heuristics) {
+                Problem p_ida(*heuristic);
+                Board start_ida = p_ida.scramble(scramble_size);
+                ++b_id;
 
-				// IDA* Algorithm
-				int nodes_expanded = 0;
-				chrono::time_point<chrono::high_resolution_clock> t0, t1;
-				t0 = chrono::high_resolution_clock::now();
-				vector<Board> solution_A_star = ID_A_star(start_ida, p_ida, nodes_expanded);
-				t1 = chrono::high_resolution_clock::now();
-				chrono::microseconds duration = chrono::duration_cast<chrono::microseconds>(t1 - t0);
-				//p.print(solution);
-				csv_write_row(csv_file, b_id, scramble_size, "IDA*", heuristic->get_name(), solution_A_star.size() - 1, nodes_expanded, duration.count());
-			}
-		}
-		cout << endl;
-	}
+                // IDA* Algorithm
+                int nodes_expanded = 0;
+                chrono::time_point<chrono::high_resolution_clock> t0, t1;
+                t0 = chrono::high_resolution_clock::now();
+                vector<Board> solution_A_star = ID_A_star(start_ida, p_ida, nodes_expanded);
+                t1 = chrono::high_resolution_clock::now();
+                chrono::microseconds duration = chrono::duration_cast<chrono::microseconds>(t1 - t0);
+                //p.print(solution);
+                csv_write_row(csv_file, b_id, scramble_size, "IDA*", heuristic->get_name(), solution_A_star.size() - 1, nodes_expanded, duration.count());
+            }
+        }
+        cout << endl;
+    }
 
 
 
-	csv_file.close();
+    csv_file.close();
 }
