@@ -363,8 +363,9 @@ void csv_write_headers(std::ofstream& f) {
 	f << "Board_ID, Scramble_Number, Algorithm, Heuristic, Moves, Nodes_Expanded, Computation_Time(us)" << endl;
 }
 
-void csv_write_row(std::ofstream& f, int board_id, int scramble_num, string algo, string heuristic, size_t moves, int nodes_exp, int microseconds) {
-	f << board_id << "," << scramble_num << "," << algo << "," << heuristic << "," << moves << "," << nodes_exp << "," << microseconds << endl;
+void csv_write_row(std::ofstream& f, int board_id, int scramble_num, string algo, string heuristic, size_t moves, int nodes_exp, long microseconds) {
+	long micros = std::max(1L, microseconds);
+	f << board_id << "," << scramble_num << "," << algo << "," << heuristic << "," << moves << "," << nodes_exp << "," << micros << endl;
 }
 
 int main()
@@ -372,6 +373,8 @@ int main()
 	const int TOTAL_TRIALS = 10;
     ManhattanDistance md;
     LinearConflictMD  lc;
+	LinearConflictMD  lc;
+    ManhattanDistance md;    
     InversionDistance id;
     vector<Heuristic*> heuristics = {&md, &lc, &id};
 
@@ -382,38 +385,55 @@ int main()
 
     int b_id = 0;
     for (int scramble_size = 10; scramble_size <= 50; scramble_size += 10) {
+
 		cout << "Scramble size: " << scramble_size << " trial: ";
         for (int num_trials = 0; num_trials < TOTAL_TRIALS; num_trials++) {
 			if (num_trials % 10 == 0)
+		for (int num_trials = 0; num_trials < TOTAL_TRIALS; num_trials++) {
 				cout << num_trials << " ";
-            for (Heuristic* heuristic : heuristics) {
-                    Problem p_ida(*heuristic);
-                    Board start_ida = p_ida.scramble(scramble_size);					
-					Board start_rbfs = start_ida;
-                    ++b_id;
-                    
-                    // IDA* Algorithm
-                    int nodes_expanded = 0;
-                    chrono::time_point<chrono::high_resolution_clock> t0, t1;
-                    t0 = chrono::high_resolution_clock::now();
-                    vector<Board> solution_A_star = ID_A_star(start_ida, p_ida, nodes_expanded);
-                    t1 = chrono::high_resolution_clock::now();
-                    chrono::microseconds duration = chrono::duration_cast<chrono::microseconds>(t1 - t0);
-                    //p.print(solution);
-                    csv_write_row(csv_file, b_id, scramble_size, "IDA*", heuristic->get_name(), solution_A_star.size() - 1, nodes_expanded, duration.count());
+			for (Heuristic* heuristic : heuristics) {
+				Problem p_rbfs(*heuristic);
+				Board start_rbfs = p_rbfs.scramble(scramble_size);				
+				++b_id;
 
-                    // RBFS Algorithm
-					Problem p_rbfs(*heuristic);					
-                    nodes_expanded = 0;
-                    t0 = chrono::high_resolution_clock::now();
-                    vector<Board> solution_RBFS = RecursiveBestFirst(start_rbfs, p_rbfs, nodes_expanded);
-                    t1 = chrono::high_resolution_clock::now();
-                    duration = chrono::duration_cast<chrono::microseconds>(t1 - t0);
-                    //p.print(solution);
-					csv_write_row(csv_file, b_id, scramble_size, "RBFS", heuristic->get_name(), solution_RBFS.size() - 1, nodes_expanded, duration.count());
-            }
-        }
+				// RBFS Algorithm
+				int nodes_expanded = 0;
+				chrono::time_point<chrono::high_resolution_clock> t0, t1;
+				t0 = chrono::high_resolution_clock::now();
+				vector<Board> solution_RBFS = RecursiveBestFirst(start_rbfs, p_rbfs, nodes_expanded);
+				t1 = chrono::high_resolution_clock::now();
+				chrono::microseconds duration = chrono::duration_cast<chrono::microseconds>(t1 - t0);
+				//p.print(solution);
+			}
+		}
 		cout << endl;
-    }
+	}
+
+	for (int scramble_size = 10; scramble_size <= 50; scramble_size += 10) {
+		cout << "Scramble size: " << scramble_size << " trial: ";
+		for (int num_trials = 0; num_trials < TOTAL_TRIALS; num_trials++) {
+			if (num_trials % (TOTAL_TRIALS / 10) == 0)
+				cout << num_trials << " ";
+			for (Heuristic* heuristic : heuristics) {
+				Problem p_ida(*heuristic);
+				Board start_ida = p_ida.scramble(scramble_size);
+				++b_id;
+
+				// IDA* Algorithm
+				int nodes_expanded = 0;
+				chrono::time_point<chrono::high_resolution_clock> t0, t1;
+				t0 = chrono::high_resolution_clock::now();
+				vector<Board> solution_A_star = ID_A_star(start_ida, p_ida, nodes_expanded);
+				t1 = chrono::high_resolution_clock::now();
+				chrono::microseconds duration = chrono::duration_cast<chrono::microseconds>(t1 - t0);
+				//p.print(solution);
+				csv_write_row(csv_file, b_id, scramble_size, "IDA*", heuristic->get_name(), solution_A_star.size() - 1, nodes_expanded, duration.count());
+			}
+		}
+		cout << endl;
+	}
+
+
+
 	csv_file.close();
 }
