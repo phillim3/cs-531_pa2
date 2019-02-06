@@ -381,7 +381,7 @@ void csv_write_row(std::ofstream& f, int board_id, int scramble_num, string algo
 
 int main()
 {
-    const int TOTAL_TRIALS = 1000;
+    const int TOTAL_TRIALS = 10000;
     LinearConflictMD  lc;
     ManhattanDistance md;
     InversionDistance id;
