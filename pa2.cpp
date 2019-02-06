@@ -357,8 +357,9 @@ void csv_write_row(std::ofstream& f, int board_id, int scramble_num, string algo
 }
 
 
-int main() {
-
+int main()
+{
+	const int NUM_TRIALS = 20;
     ManhattanDistance md;
     LinearConflictMD  lc;
     InversionDistance id;
@@ -369,12 +370,12 @@ int main() {
 	csv_write_headers(csv_file);
 
     int b_id = 0;
-    for (int m = 10; m <= 50; m += 10) {
-		cout << "Scamble:" << m << endl;
-        for (int n = 0; n < 10; ++n) {
-            for (Heuristic* h : heuristics) {
-                    Problem p(*h);
-                    Board start = p.scramble(m);
+    for (int scramble_size = 10; scramble_size <= 50; scramble_size += 10) {
+		cout << "Scamble:" << scramble_size << endl;
+        for (int num_trials = 0; num_trials < NUM_TRIALS; num_trials++) {
+            for (Heuristic* heuristic : heuristics) {
+                    Problem p(*heuristic);
+                    Board start = p.scramble(scramble_size);
                     ++b_id;
                     
                     // IDA* Algorithm
@@ -385,10 +386,10 @@ int main() {
                     t1 = chrono::high_resolution_clock::now();
                     chrono::microseconds duration = chrono::duration_cast<chrono::microseconds>(t1 - t0);
                     //p.print(solution);
-                    csv_write_row(csv_file, b_id, m, "IDA*", h->get_name(), solution_A_star.size() - 1, nodes_expanded, duration.count());
+                    csv_write_row(csv_file, b_id, scramble_size, "IDA*", heuristic->get_name(), solution_A_star.size() - 1, nodes_expanded, duration.count());
 
-					Problem p2(*h);
-					Board start2 = p2.scramble(m);
+					Problem p2(*heuristic);
+					Board start2 = p2.scramble(scramble_size);
                     // RBFS Algorithm
                     nodes_expanded = 0;
                     t0 = chrono::high_resolution_clock::now();
@@ -396,7 +397,7 @@ int main() {
                     t1 = chrono::high_resolution_clock::now();
                     duration = chrono::duration_cast<chrono::microseconds>(t1 - t0);
                     //p.print(solution);
-					csv_write_row(csv_file, b_id, m, "RBFS", h->get_name(), solution_RBFS.size() - 1, nodes_expanded, duration.count());
+					csv_write_row(csv_file, b_id, scramble_size, "RBFS", heuristic->get_name(), solution_RBFS.size() - 1, nodes_expanded, duration.count());
             }
         }
     }

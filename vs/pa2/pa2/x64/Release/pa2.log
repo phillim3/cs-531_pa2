@@ -1,0 +1,22 @@
+﻿  MurmurHash3.cpp
+  pa2.cpp
+c:\users\user\dev\ghpub\cs-531_pa2\pa2.cpp(216): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
+c:\users\user\dev\ghpub\cs-531_pa2\pa2.cpp(240): warning C4244: 'argument': conversion from '_Rep' to 'unsigned int', possible loss of data
+          with
+          [
+              _Rep=std::chrono::system_clock::rep
+          ]
+c:\users\user\dev\ghpub\cs-531_pa2\pa2.cpp(389): warning C4244: 'argument': conversion from '_Rep' to 'int', possible loss of data
+          with
+          [
+              _Rep=__int64
+          ]
+c:\users\user\dev\ghpub\cs-531_pa2\pa2.cpp(400): warning C4244: 'argument': conversion from '_Rep' to 'int', possible loss of data
+          with
+          [
+              _Rep=__int64
+          ]
+  Generating code
+  All 627 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  pa2.vcxproj -> C:\Users\User\dev\ghpub\cs-531_pa2\vs\pa2\x64\Release\pa2.exe
