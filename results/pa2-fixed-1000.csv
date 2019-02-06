@@ -1,0 +1,10 @@
+Row Labels,Sum of  Computation_Time(us),Sum of  Nodes_Expanded
+IDA*,6927687,7425304
+Inversion Distance,4609694,3111655
+Manhattan Distance,880798,1714786
+MD + Linear Conflict Correction,1437195,2598863
+RBFS,5997625,3226152
+Inversion Distance,3749108,1187467
+Manhattan Distance,898107,853761
+MD + Linear Conflict Correction,1350410,1184924
+Grand Total,12925312,10651456
