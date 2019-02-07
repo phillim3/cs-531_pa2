@@ -96,58 +96,59 @@ An overall summary of results can be seen in \ref{fig:summary_overall}. There ar
 \end{figure}
 
 \subsection{Heuristic Performance}
-Examining the performance of the puzzle solver using our three different heuristics, we find distinct differences between the heuristics. 
-1. Is there a clear preference ordering among the heuristics you tested considering the number of nodes searched and the total CPU time taken to solve the problems for the two algorithms?
-
+Examining the performance of the puzzle solver with our three different heuristics, we find distinct differences between the heuristics. In \ref{fig:heuristic_avg}, we can see, on average, that the Inversion Distance heuristic uses the most CPU time and expands the most nodes. The Linear Conflict Correction variant of Manhattan Distance is more CPU efficient than the Inversion Distance, but expands about same number of nodes. Somewhat surprisingly, the base Manhattan Distance heuristic with its reliance on the relaxed problem, performs the best of all our heuristics.
 
 \begin{figure}[H]%
 	\centering\begin{tabular}{c}
-		\includegraphics[scale=0.4]{plots/scramble-algorithm-avgmoves.png}\\
-		Scramble Size vs. Algorithm , Average Moves \\[1ex]% add a little extra space
-		\includegraphics[scale=0.4]{plots/scramble-heuristic-avgmoves.png}\\
-		Scramble Size vs. Heuristic , Average Moves\\[1ex]
+		\includegraphics[scale=0.4]{plots/heuristic-avg-metrics.png}\\
 	\end{tabular}
-	\caption{Performance of Algorithm vs. Scramble Size}%
-	\label{fig:summary_avgmoves}%
+	\caption{Average Performance of Puzzle Solver vs. Heuristic Choice}%
+	\label{fig:heuristic_avg}%
 \end{figure}
 
-1. Is there a clear preference ordering among the heuristics you tested considering the number of nodes searched and the total CPU time taken to solve the problems for the two algorithms?
-
+To further examine the heuristic performance, we can look at the total sum of the performance metrics as well as the average. In figure \ref{fig:heuristic_sum} we see that the Manhattan Distance is clearly the most efficient heuristic, for both CPU time and node expansion.
 
 \begin{figure}[H]%
 	\centering\begin{tabular}{c}
-		\includegraphics[scale=0.4]{plots/scramble-algorithm-avgnodes.png}\\
-		Scramble Size vs. Algorithm , Average Nodes \\[1ex]% add a little extra space
-		\includegraphics[scale=0.4]{plots/scramble-heuristic-avgnodes.png}\\
-		Scramble Size vs. Heuristic , Average Nodes \\[1ex]
+		\includegraphics[scale=0.4]{plots/heuristic-sum-metrics.png}\\
 	\end{tabular}
-	\caption{Performance of Algorithm vs. Scramble Size}%
-	\label{fig:summary_avgnodes}%
+	\caption{Sum of Performance Metrics of Puzzle Solver vs. Heuristic Choice}%
+	\label{fig:heuristic_sum}%
 \end{figure}
 
-1. Is there a clear preference ordering among the heuristics you tested considering the number of nodes searched and the total CPU time taken to solve the problems for the two algorithms?
-
+\subsection{Optimality versus Computational Cost}
+If we consider a solution to a smaller scramble size problem as a non-optimal solution to a large scramble size problem, then it is clear that a non-optimal solution does not require as many nodes to be expanded, nor does it use as much CPU time as an optimal solution. If we examine the results in Figure X, we can see that as the scramble size increases, the computational costs also increase quite rapidly. Hence, for some problems where a fully optimal solution is not within our cost budget of memory, CPU time, or both, we may wish to sacrifice some acceptable level of optimality in order to stay within our budget.\\
+\\
+In Figure \ref{fig:scramble_comp} we can see the largest two scramble sizes require more than linear increases in computation time to solve.
 
 \begin{figure}[H]%
 	\centering\begin{tabular}{c}
 		\includegraphics[scale=0.4]{plots/scramble-algorithm-avgcomp.png}\\
-		Scramble Size vs. Algorithm , Average Computation Time (microsec) \\[1ex]% add a little extra space
-		\includegraphics[scale=0.4]{plots/scramble-heuristic-avgcomp.png}\\
-		Scramble Size vs. Heuristic , Average Computation Time (microsec)\\[1ex]
 	\end{tabular}
-	\caption{Performance of Algorithm vs. Scramble Size}%
-	\label{fig:summary_avgmoves}%
+	\caption{Average Computational Cost vs. Scramble Size}%
+	\label{fig:scramble_comp}%
 \end{figure}
 
-1. Is there a clear preference ordering among the heuristics you tested considering the number of nodes searched and the total CPU time taken to solve the problems for the two algorithms?
+Likewise, in Figure \ref{fig:scramble_nodes} we also see the largest two scramble sizes require more than linear increases in node expansion to solve.
 
-
-\subsection{Optimality versus Computational Cost}
-If we consider a solution to a smaller scramble size problem as a non-optimal solution to a large scramble size problem, then it is clear that a non-optimal solution does not require as many nodes to be expanded, nor does it use as much CPU time as an optimal solution. If we examine the results in Figure X, we can see that as the scramble size increases, the computational costs also increase quite rapidly. Hence, for some problems where a fully optimal solution is not within our cost budget of memory, CPU time, or both, we may wish to sacrifice some acceptable level of optimality in order to stay within our budget.
-%todo: add reference to appropriate figure
+\begin{figure}[H]%
+	\centering\begin{tabular}{c}
+		\includegraphics[scale=0.4]{plots/scramble-algorithm-avgnodes.png}\\
+	\end{tabular}
+	\caption{Average Computational Cost vs. Scramble Size}%
+	\label{fig:scramble_nodes}%
+\end{figure}
 
 \subsection{Heuristic Cost}
-To examine the impact of heuristic choice on the total problem-solving time, we computed the average computation time required per expanded node. Using this computed metric, we can see that the unit cost of the inversion distance heuristic is over twice that of either the Manhattan distance metric or the Manhattan distance metric with  linear conflict correction. Hence, we can conclude that for more complex problems that require many nodes to be expanded, the heuristic code will be a significant component of the overall computation time.
+To examine the impact of heuristic choice on the total problem-solving time, we computed the average computation time required per expanded node. Using this computed metric, we can see that the unit cost of the inversion distance heuristic is over twice that of either the Manhattan distance metric or the Manhattan distance metric with  linear conflict correction. Hence, we can conclude that for more complex problems that require many nodes to be expanded, the heuristic code will be a significant component of the overall computation time. In figure \ref{fig:heuristic_eff1}, we can see the obvious differences between the heuristics, as previously described.
+
+\begin{figure}[H]%
+	\centering\begin{tabular}{c}
+		\includegraphics[scale=0.4]{plots/heuristic-avg-comp-time-per-node-exp.png}\\
+	\end{tabular}
+	\caption{Average Computational Time Per Node Expansion vs. Heuristic Choice}%
+	\label{fig:heuristic_eff1}%
+\end{figure}
 
 \subsection{Heuristic Selection and Characterization}
 For any given problem domain, there will often be a range of admissible heuristics. Ideally, we would like to be able to construct a heuristic, $h(s)$, such that $h(s)$ is within some small $\epsilon$ of $h^*(s)$. For the 15-Puzzle problem, we know that there are heuristics that may be closer to $h^*(s)$ than the commonly used heuristic, Manhattan Distance. Two similar heuristics were considered for this work, both of which examine the number of out-of-order pairs of tiles in the scrambled puzzle. These heuristics reflect the fact that the Manhattan Distance operates on a relaxed problem and that by considering how the problem is relaxed, we can choose heuristics that directly address the relaxation.
@@ -159,14 +160,20 @@ In the domain of 15-Puzzle, if we have two tiles in the same row, both of which 
 Thinking further about out-of-order tile pairs, another admissible heuristic is inversion distance. There are two components to inversion distance. For horizontal inversion distance, we concatenating the rows end-to-end so we are effectively treating the $4x4$ puzzle grid as a single row. In this single row, we then count the number of tile pairs that are out of order. These are horizontal inversions. In counting inversions, we do not count any tile pairs that include the empty square. Horizontal moves cannot affect horizontal inversions. A vertical move in the square puzzle corresponds to one tile jumping over three other tiles in the single-row format puzzle. This changes the number of inversions by $\pm1$ or $\pm3$. Therefore a lower bound for the number of vertical moves in a solution is given by \(\ceil{n/3}\), where $n$ is the number of inversions in our long row. The number of horizontal moves needed can be computed by considering the vertical inversions. The total inversion distance is the sum of these two inversion counts, both of which are lower bounds.
 
 \subsubsection{Algorithm versus Node Expansion and Computation Time}
-We found from running 10,000 trials for each of the scramble sizes, heuristics, and algorithms, we found that the IDA\textsuperscript{*} algorithm requires about 10-15\% more computation time (the included data reflects a 11.3\% increase). Of course, IDA\textsuperscript{*} ends up expanding many more nodes than RBFS due to its iterative nature which ends up repeating work that was done in previous iterations.
+We found from running 10,000 trials for each of the scramble sizes, heuristics, and algorithms, we found that the IDA\textsuperscript{*} algorithm requires about 10-15\% more computation time (the included data reflects a 11.3\% increase). Of course, IDA\textsuperscript{*} ends up expanding many more nodes than RBFS due to its iterative nature which ends up repeating work that was done in previous iterations. Figure \ref{fig:algorithm_eff1} shows these differences between the algorithms.
+
+\begin{figure}[H]%
+	\centering\begin{tabular}{c}
+		\includegraphics[scale=0.4]{plots/algorithm-avg-metrics.png}\\
+	\end{tabular}
+	\caption{Computation Time and Node Expansion vs. Algorithm Choice}%
+	\label{fig:algorithm_eff1}%
+\end{figure}
 
 \section{Discussion}
-Learning different heuristics were very interesting. The simple Manhattan distance heuristic performed the best in every class, trumping the more complex or clever heuristics.
-
-We expected to see cycles in the solutions, where common states surfaced. However this intuition did not pan out.
-
-Most perplexing, certain board states need an enormous amount of node expansion to find a solution. These board configurations seem common enough, but whatever shared characteristics these board states have, they are not readily apparent.
+The experimental results provided us with several key findings. First, we found that there were marked differences in the performance of the three heuristics. Surprisingly, the simplest heuristic that we might otherwise think is farthest from $h^*(s)$ performed the best in terms of computational cost and node expansion. The second key finding was that the problem difficulty did not scale linearly with the increase in the scramble size. The puzzle solver took much longer for the two more complicated initial puzzle states (Scramble-40 and Scramble-50). From this finding we might infer that for problems that do not need a fully optimal solution, we would be able to trade computation time and/or memory usage for solution optimality. In terms of the computational cost of the heuristic themselves, our third finding is that only one heuristic (the Inversion Distance) added significantly to the overall computational cost of solving the puzzles. In later analysis, we determined that more efficient code and/or data structures would most likely have reduced this computational cost. Finally, we found that RBFS, not having to iterate through increasing depths, was generally more efficient than IDA\textsuperscript{*}.\\
+\\
+While not reflected directly in the various figures, certain initial board states needed an enormous amount of node expansion to find a solution. These difficult configurations point toward future improvements in algorithm and/or heuristic choice. Other potential future efforts include testing on larger versions of the puzzle, low level code and data structure optimizations, composite or ensemble type heuristics, and finer resolution code timing to help us identify slow portions of the algorithms and/or heuristics.
 
 \section{Code}
 \begin{lstlisting}
