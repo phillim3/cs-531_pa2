@@ -1,11 +1,8 @@
 
+For the report,  follow the same format you used for the first programming assignment. Your report should look like a research paper with abstract, introduction (a summary of the goals and results), experimental setup, result tables and plots, and the discussion. You should include answers to following questions in your discussion of results. Please feel free to add any other important observations.
+
 
 For each m, plot the average time consumed, nodes searched, and the optimal solution lengths for the 2 algorithms and the 2 heuristics. 
-
-
-You might that your algorithm is taking too long for some inputs and heuristics. It is ok to bound the time and/or the number of nodes searched to a maximum and report what fraction of the problems are solved. Report the other statistics on the solved problems.
-
-For the report,  follow the same format you used for the first programming assignment. Your report should look like a research paper with abstract, introduction (a summary of the goals and results), experimental setup, result tables and plots, and the discussion. You should include answers to following questions in your discussion of results. Please feel free to add any other important observations.
 
 1. Is there a clear preference ordering among the heuristics you tested considering the number of nodes searched and the total CPU time taken to solve the problems for the two algorithms?
 
